@@ -50,7 +50,7 @@ function MyComponent() {
                     {
                         onclick: increment
                     },
-                    "Click Me"
+                    "Increment"
                 )
             )
         }
@@ -77,7 +77,7 @@ class MyComponent {
                 {
                     onclick: this
                 },
-                "Click Me"
+                "Increment"
             )
         )
     }
