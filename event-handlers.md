@@ -84,7 +84,7 @@ class MyComponent {
 }
 ```
 
-Any object with a `handleEvent` method can be used as an `EventListener`. In the above example, our class has this method so we can use `this` directly to handle the event. However in this case, if we want to handle more events in this view, then handleEvent will need to be able to distinguish between them.
+Any object with a `handleEvent` method can be used as an `EventListener`. In the above example, our class has a `handleEvent` method so we can provide `this` directly to `onclick`. However, if we want to handle more events in the view, then handleEvent will need to be able to distinguish between them:
 
 ```javascript
 class MyComponent {
@@ -124,7 +124,7 @@ class MyComponent {
 }
 ```
 
-Invoking class or POJO methods from event handler functions has some caveats if you want to use `this`. The following example will *not* work:
+Invoking class or POJO methods from event handler functions have some caveats if you want to use `this`. The following example will *not* work:
 
 ```javascript
 class MyBrokenComponent {
