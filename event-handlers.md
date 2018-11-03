@@ -94,9 +94,9 @@ class MyComponent {
 
     handleEvent(e) {
         const action = e.currentTarget.dataset.action
-        if (action === "button-increment") {
+        if (action === "increment") {
             this.count += 1
-        } else if (action === "button-decrement") {
+        } else if (action === "decrement") {
             this.count -= 1
         } else {
             // other cases...
@@ -120,6 +120,80 @@ class MyComponent {
                 "Decrement"
             )
         ]
+    }
+}
+```
+
+Invoking class or POJO methods from event handler functions has some caveats if you want to use `this`. The following example will *not* work:
+
+```javascript
+class MyBrokenComponent {
+    constructor() {
+        this.count = 0
+    }
+
+    increment() {
+        // `this` will point to the event, not our component instance
+        this.count += 1
+    }
+
+    view() {
+        return m("button",
+            {
+                // not bound to `this` when invoked
+                onclick: this.increment
+            },
+            "Increment"
+        )
+    }
+}
+```
+
+Given that we're using a `class` (and therefore ES2015 or later) we can wrap the call to `increment` in an arrow function:
+
+```javascript
+class MyComponent {
+    constructor() {
+        this.count = 0
+    }
+
+    increment() {
+        this.count += 1
+    }
+
+    view() {
+        return m("button",
+            {
+                onclick: () => {
+                    this.increment()
+                }
+            },
+            "Increment"
+        )
+    }
+}
+```
+
+When using a stateful POJO component, you're better off using `vnode.state` rather than `this`, especially in cases where you're using ES5:
+
+```javascript
+var MyComponent = {
+    oninit: function(vnode) {
+        vnode.state.count = 0
+    },
+
+    increment: function(vnode) {
+        vnode.state.count += 1
+    },
+
+    view: function(vnode) {
+        return m("button",
+            {
+                onclick: function() {
+                    vnode.state.increment(vnode)
+                }
+            }
+        )
     }
 }
 ```
