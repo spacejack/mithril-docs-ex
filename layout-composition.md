@@ -115,3 +115,44 @@ m(Layout, {
     }
 })
 ```
+
+### Using view functions
+
+Another way to compose layout is with view functions. The advantage of this is that it does not introduce additional state and produces much saner stack traces in case of an error, because mithrils component rendering is not involved.
+
+```javascript
+function baseView(attrs, children) {
+    return m(".layout", {
+        className: attrs.className
+    },
+        headerView(),
+        children,
+        footerView()
+    )
+}
+```
+Usage:
+```javascript
+m.route(document.body, "/", {
+    "/home": {
+        render: function() {
+            return baseView(
+                { className: 'home' }, 
+                m(HomePage)  // component as children
+            )
+        }
+    },
+    "/about": {
+        render: function() {
+            return baseView(
+                { className: 'about' },
+                aboutView()  // view function as children
+            )
+        }
+    },
+})
+
+```
+
+
+
